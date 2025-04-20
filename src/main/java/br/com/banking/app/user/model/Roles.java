@@ -1,4 +1,4 @@
-package br.com.banking.app.auth.constants;
+package br.com.banking.app.user.model;
 
 public enum Roles {
 
