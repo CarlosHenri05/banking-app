@@ -11,6 +11,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,11 +48,21 @@ public class JwtService {
    */
 
   private boolean isTokenExpired(String token) {
-    return false;
+    return extractExpiration(token).before(new Date());
   }
 
   private boolean isTokenValid(String token, UserDetails userDetails) {
     return false;
+  }
+
+  public <T> T extractClaim (String token, Function<Claims, T> claimsResolver) {
+    final Claims claims = extractAllClaims(token);
+    
+    return claimsResolver.apply(claims);
+  }
+
+  private Date extractExpiration (String token) {
+    return extractClaim(token, Claims::getExpiration);
   }
 
   private Claims extractAllClaims (String token) {
