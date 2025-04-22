@@ -10,7 +10,7 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -25,15 +25,24 @@ public class JwtService {
   @Value("${application.security.jwt.expiration}")
   private long jwtExpiration;
 
-  public String generateToken(Map<String,Object> extraClaims, UserDetails userDetails, long jwtExpiration) {
+
+  public String generateToken(UserDetails userDetails) {
+    return generateToken(new HashMap<>(), userDetails);
+  }
+
+  public String generateToken(HashMap<String,Object> extraClaims, UserDetails userDetails) {
     return Jwts.builder()
                .setClaims(extraClaims)
                .setSubject(userDetails.getUsername())
                .setIssuedAt(new Date(System.currentTimeMillis()))
-               .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+               .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7)))
                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                .compact();
                
+  }
+
+  public String extractUsername (String token){
+    return extractClaim(token, Claims::getSubject);
   }
 
   private Key getSigningKey() {
@@ -41,18 +50,15 @@ public class JwtService {
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
-  /*
-   * 
-   * TO-DO 
-   * 
-   */
 
   private boolean isTokenExpired(String token) {
     return extractExpiration(token).before(new Date());
   }
 
-  private boolean isTokenValid(String token, UserDetails userDetails) {
-    return false;
+  public boolean isTokenValid(String token, UserDetails userDetails) {
+    final String username = extractUsername(token);
+
+    return username.equals(userDetails.getUsername()) && !isTokenExpired(token); // -> O token JWT só é válido caso o username de Claims seja o mesmo que de UserDetails e o token não esteja expirado.
   }
 
   public <T> T extractClaim (String token, Function<Claims, T> claimsResolver) {
@@ -66,7 +72,11 @@ public class JwtService {
   }
 
   private Claims extractAllClaims (String token) {
-    return null;
+    return Jwts.parserBuilder()
+               .setSigningKey(getSigningKey())
+               .build()
+               .parseClaimsJws(token)
+               .getBody();
   }
 
 
