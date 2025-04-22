@@ -6,10 +6,12 @@ import java.time.LocalDateTime;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import br.com.banking.app.user.model.User;
 import br.com.banking.app.user.repository.UserRepository;
 
+@Service
 public class UserService {
 
   private final UserRepository userRepository;
@@ -35,5 +37,7 @@ public class UserService {
 
     return userRepository.save(newUser);
   }
+
+
 
 }
