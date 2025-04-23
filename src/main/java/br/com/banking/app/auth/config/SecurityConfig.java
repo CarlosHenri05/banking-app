@@ -24,11 +24,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AuthenticationProvider authenticationProvider;
+  
 
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final UserService userService;
-
   private final PasswordEncoder passwordEncoder;
 
     
@@ -57,7 +56,7 @@ public class SecurityConfig {
       .authorizeHttpRequests(authorize -> authorize.requestMatchers("/auth/**").permitAll()
       .anyRequest()
       .authenticated())
-      .authenticationProvider(authenticationProvider)
+      .authenticationProvider(authenticationProvider())
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
