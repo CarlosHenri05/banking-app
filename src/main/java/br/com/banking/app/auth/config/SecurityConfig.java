@@ -53,7 +53,13 @@ public class SecurityConfig {
     http
       .csrf(csrf -> csrf.disable())
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-      .authorizeHttpRequests(authorize -> authorize.requestMatchers("/auth/**").permitAll()
+      .authorizeHttpRequests(authorize -> 
+      authorize.requestMatchers("/auth/**").permitAll()
+      .requestMatchers("/v3/api-docs/**").permitAll()
+      .requestMatchers("/swagger-ui/**").permitAll()
+      .requestMatchers("/swagger-ui/index.html").permitAll()
+      .requestMatchers("/swagger-ui.html").permitAll()
+      .requestMatchers("/swagger-resources/**").permitAll()
       .anyRequest()
       .authenticated())
       .authenticationProvider(authenticationProvider())
