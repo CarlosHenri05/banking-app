@@ -10,8 +10,13 @@ import br.com.banking.app.auth.dto.AuthResponseDTO;
 import br.com.banking.app.auth.dto.LoginRequestDTO;
 import br.com.banking.app.auth.dto.RegisterRequestDTO;
 import br.com.banking.app.auth.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Auth", description = "Authentication and Authorization")
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -21,14 +26,18 @@ public class AuthController {
 
 
 
-
+  @Operation(summary = "Login", description = "User login")
+  @ApiResponse(responseCode = "200", description = "User logged in successfully")
   @PostMapping("/auth/login")
-  public ResponseEntity<AuthResponseDTO> userLogin (@RequestBody LoginRequestDTO loginRequestDTO) {
+  public ResponseEntity<AuthResponseDTO> userLogin (@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
     return ResponseEntity.ok(authService.signIn(loginRequestDTO));
   }
 
+  @Operation(summary = "Register", description = "User register")
+  @ApiResponse(responseCode = "200", description = "User registered successfully")
+  @ApiResponse(responseCode = "400", description = "User already exists")
   @PostMapping("/auth/register") 
-  public ResponseEntity<AuthResponseDTO> userRegister (@RequestBody RegisterRequestDTO RegisterRequestDTO) {
+  public ResponseEntity<AuthResponseDTO> userRegister (@RequestBody @Valid RegisterRequestDTO RegisterRequestDTO) {
     return ResponseEntity.ok(authService.signUp(RegisterRequestDTO));
   }
 
