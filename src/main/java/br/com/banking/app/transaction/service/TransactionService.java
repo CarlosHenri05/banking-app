@@ -1,7 +1,6 @@
 package br.com.banking.app.transaction.service;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -30,10 +29,25 @@ public class TransactionService {
       transactionRepository.save(transaction);
   }
 
-  public Transaction returnTransaction (User user){
-    Transaction tx = transactionRepository.findByEmail(user.getUsername()).orElseThrow( () -> new RuntimeException("Not found"));
+  public List<Transaction> returnTransactions (User user) {
+    return user.getTransactions().stream()
+                                 .toList();
+  }
 
-    return tx;
+  public Transaction returnSpecificTransaction(User user, long id) throws RuntimeException{
+    Transaction transaction = transactionRepository.findById(id).orElseThrow( () -> new RuntimeException("Id"));
+
+    if (user.getId() == transaction.getUser().getId()){
+      return transaction;
+    }
+
+    return null;
+  }
+
+  public Double returnAccountBalance(User user){
+    return user.getTransactions().stream()
+                                 .mapToDouble(Transaction::getAmount)
+                                 .sum();
   }
 
 }
