@@ -13,6 +13,12 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class PersistanceJPAConfig {
+
+  private final DataSource dataSource;
+
+  public PersistanceJPAConfig(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
   
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
@@ -22,7 +28,7 @@ public class PersistanceJPAConfig {
     LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
     factory.setJpaVendorAdapter(vendorAdapter);
     factory.setPackagesToScan("br.com.banking.app");
-    factory.setDataSource(factory.getDataSource());
+    factory.setDataSource(dataSource);
     
     return factory;
   }
