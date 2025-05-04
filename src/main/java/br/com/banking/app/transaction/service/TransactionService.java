@@ -11,7 +11,6 @@ import br.com.banking.app.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class TransactionService {
   
   private UserRepository userRepository;
@@ -22,6 +21,7 @@ public class TransactionService {
     this.transactionRepository = transactionRepository;
   }
 
+  @Transactional
   public void saveTransaction (Transaction transaction, String username) {
       User user = userRepository.findByEmail(username).orElseThrow( () ->  new RuntimeException("No user found")); 
 
@@ -44,10 +44,14 @@ public class TransactionService {
     return null;
   }
 
-  public Double returnAccountBalance(User user){
+  public static Double returnAccountBalance(User user){
     return user.getTransactions().stream()
                                  .mapToDouble(Transaction::getAmount)
                                  .sum();
   }
+
+  
+
+
 
 }
