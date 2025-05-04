@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.banking.app.transaction.model.Transaction;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -49,6 +51,7 @@ public class User implements UserDetails{
 
   @Builder.Default
   @OneToMany (mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonIgnore
   private List<Transaction> transactions = new ArrayList<>();
 
 
