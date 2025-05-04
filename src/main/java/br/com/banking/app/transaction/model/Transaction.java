@@ -35,5 +35,10 @@ public class Transaction {
   private OffsetDateTime time;
 
 
+  public Transaction(User user, double amount, OffsetDateTime time){
+    this.amount = amount;
+    this.user = user;
+    this.time = time;
+  }
 
 }
