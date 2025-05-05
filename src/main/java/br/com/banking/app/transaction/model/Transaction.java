@@ -11,13 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "transactions")
-@AllArgsConstructor
 @Getter
 @Setter
 public class Transaction {
@@ -33,6 +31,10 @@ public class Transaction {
   private double amount;
 
   private OffsetDateTime time;
+
+  public Transaction() {
+    
+  }
 
 
   public Transaction(User user, double amount, OffsetDateTime time){
