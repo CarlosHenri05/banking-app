@@ -14,6 +14,7 @@ import br.com.banking.app.transaction.dto.TransactionRequestDTO;
 import br.com.banking.app.transaction.dto.TransactionResponseDTO;
 import br.com.banking.app.transaction.mapper.TransactionMapper;
 import br.com.banking.app.transaction.model.Transaction;
+import br.com.banking.app.transaction.repository.TransactionRepository;
 import br.com.banking.app.transaction.service.TransactionService;
 import br.com.banking.app.user.model.User;
 import br.com.banking.app.user.repository.UserRepository;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class TransactionController {
   final TransactionService transactionService;
   final UserRepository userRepository;
+  final TransactionRepository transactionRepository;
 
 
   @Operation (summary = "Realizar transações")
@@ -51,7 +53,8 @@ public class TransactionController {
   @Operation(summary = "Retornar todas as transações de um usuário")
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "OK"),
-    @ApiResponse(responseCode = "403", description = "Sem permissão para essa ação")
+    @ApiResponse(responseCode = "403", description = "Sem permissão para essa ação"),
+    @ApiResponse(responseCode = "400", description = "ID não encontrado")
   })
   @GetMapping("/all")
   public ResponseEntity<List<TransactionResponseDTO>> getAllTransactions(@RequestParam long id) {
@@ -62,5 +65,23 @@ public class TransactionController {
     List<TransactionResponseDTO> listOfResponses = TransactionMapper.transactionListToResponseList(list);
 
     return ResponseEntity.ok(listOfResponses);
+  }
+
+
+  /*
+   * TO-DO:
+   * 
+   * Adicionar parâmetro de usuário para buscar dentro da lista de transações
+   * um id de transação específica de um usuário específico, para diminuir a
+   * generalização
+   */
+  @GetMapping("/{id}")
+  @Operation(summary = "Retornar uma transação de id específico")
+  public ResponseEntity<TransactionResponseDTO> returnSpecificTransation(@RequestParam long id) {
+    Transaction transaction = transactionRepository.getById(id);
+
+    TransactionResponseDTO transactionResponse = TransactionMapper.toResponse(transaction);
+
+    return ResponseEntity.ok(transactionResponse);
   }
 }
