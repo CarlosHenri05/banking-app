@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import br.com.banking.app.transaction.exceptions.ResourceNotFoundException;
 import br.com.banking.app.transaction.model.Category;
 import br.com.banking.app.transaction.model.Transaction;
 import br.com.banking.app.transaction.model.TransactionType;
@@ -32,13 +33,17 @@ public class TransactionService {
       transactionRepository.save(transaction);
   }
 
-  public List<Transaction> returnTransactions (User user) {
+  public List<Transaction> getAllTransactions (long id) {
+    User user = userRepository.findById(id).orElseThrow( ()-> new ResourceNotFoundException("Resource was not found in Database"));
+
     return user.getTransactions().stream()
                                  .toList();
   }
 
-  public Transaction returnSpecificTransaction(User user, long id) throws RuntimeException{
-    Transaction transaction = transactionRepository.findById(id).orElseThrow( () -> new RuntimeException("Id"));
+  public Transaction getTransactionById(long id, long idTransaction) throws RuntimeException{
+    User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Resource not found"));
+    
+    Transaction transaction = transactionRepository.findById(idTransaction).orElseThrow( () -> new RuntimeException("Id"));
 
     if (user.getId() == transaction.getUser().getId()){
       return transaction;
@@ -47,27 +52,36 @@ public class TransactionService {
     return null;
   }
 
-  public Double returnHowMuchYouveSpent(User user){
+  public Double getTotalExpenses(long id){
+    User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Resource not found"));
+
     return user.getTransactions().stream()
                                  .filter(transaction -> transaction.getType() == TransactionType.EXPENSE)
                                  .mapToDouble(Transaction::getAmount)
                                  .sum();
   }
 
-  public Double returnHowMuchYouveEarned(User user){
+  public Double getTotalIncome(long id){
+    User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Resource not found"));
+
     return user.getTransactions().stream()
                                  .filter(transaction -> transaction.getType() == TransactionType.INCOME)
                                  .mapToDouble(Transaction::getAmount)
                                  .sum();
   }
 
-  public List<Transaction> returnSpecificCategoryofTransactionList(User user, Category category){
+  public List<Transaction> returnSpecificCategoryofTransactionList(long id, Category category){
+    User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Resource not found"));
+
+
     return user.getTransactions().stream()
                                  .filter(transaction -> transaction.getCategory().equals(category))
                                  .toList();
   }
 
-  public List<Transaction> returnTransactionsInSpecificPeriodOfTime(User user, OffsetDateTime time){
+  public List<Transaction> returnTransactionsInSpecificPeriodOfTime(long id, OffsetDateTime time){
+    User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Resource not found"));
+
     return user.getTransactions().stream()
                                  .filter(transaction -> transaction.getCreatedAt().equals(time))
                                  .toList();
