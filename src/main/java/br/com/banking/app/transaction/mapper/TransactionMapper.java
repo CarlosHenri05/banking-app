@@ -1,5 +1,8 @@
 package br.com.banking.app.transaction.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.banking.app.transaction.dto.TransactionRequestDTO;
 import br.com.banking.app.transaction.dto.TransactionResponseDTO;
 import br.com.banking.app.transaction.model.Transaction;
@@ -19,5 +22,15 @@ public class TransactionMapper {
         transaction.getTime()
     );
   }
+  
+  public static List<TransactionResponseDTO> transactionListToResponseList (List<Transaction> transactionList) {
+    List<TransactionResponseDTO> list = new ArrayList<>();
+
+    for(Transaction tr : transactionList) {
+      list.add(toResponse(tr));
+    }
+    return list;
+  }
 }
+
 
