@@ -13,7 +13,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
   Optional<Transaction> findById(long id);
 
-
   Optional<Transaction>findByUser(User user);
 
   Transaction getById(long id);
