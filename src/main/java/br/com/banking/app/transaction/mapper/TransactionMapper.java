@@ -26,9 +26,10 @@ public class TransactionMapper {
   public static List<TransactionResponseDTO> transactionListToResponseList (List<Transaction> transactionList) {
     List<TransactionResponseDTO> list = new ArrayList<>();
 
-    for(Transaction tr : transactionList) {
-      list.add(toResponse(tr));
-    }
+    transactionList.forEach( transaction -> {
+      list.add(toResponse(transaction));
+    });
+    
     return list;
   }
 }
