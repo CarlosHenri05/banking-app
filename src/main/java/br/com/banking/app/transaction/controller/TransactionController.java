@@ -1,12 +1,17 @@
 package br.com.banking.app.transaction.controller;
 
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.banking.app.transaction.dto.TransactionRequestDTO;
+import br.com.banking.app.transaction.dto.TransactionResponseDTO;
 import br.com.banking.app.transaction.mapper.TransactionMapper;
 import br.com.banking.app.transaction.model.Transaction;
 import br.com.banking.app.transaction.service.TransactionService;
@@ -41,7 +46,21 @@ public class TransactionController {
     transactionService.saveTransaction(tx, tx.getUser().getUsername());
 
     return ResponseEntity.status(201).build();
+  }
 
+  @Operation(summary = "Retornar todas as transações de um usuário")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "OK"),
+    @ApiResponse(responseCode = "403", description = "Sem permissão para essa ação")
+  })
+  @GetMapping("/all")
+  public ResponseEntity<List<TransactionResponseDTO>> getAllTransactions(@RequestParam long id) {
+    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
+    List<Transaction> list = user.getTransactions();
+
+    List<TransactionResponseDTO> listOfResponses = TransactionMapper.transactionListToResponseList(list);
+
+    return ResponseEntity.ok(listOfResponses);
   }
 }
