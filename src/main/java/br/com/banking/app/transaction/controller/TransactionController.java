@@ -78,9 +78,8 @@ public class TransactionController {
   @GetMapping("/{id}/{idTransaction}")
   @Operation(summary = "Retornar uma transação de id específico")
   public ResponseEntity<TransactionResponseDTO> returnSpecificTransation(@PathVariable long id, @PathVariable long idTransaction) {
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-
-    Transaction transaction = transactionService.returnSpecificTransaction(user, idTransaction);
+    
+    Transaction transaction = transactionService.getTransactionById(id, idTransaction);
 
     TransactionResponseDTO response = TransactionMapper.toResponse(transaction);
 
@@ -90,23 +89,20 @@ public class TransactionController {
   @GetMapping("/expense/{id}")
   @Operation(summary = "Retornar o quanto de dinheiro foi gasto de um usuário específico")
   public ResponseEntity<Double> returnHowMuchYouveSpent(@PathVariable long id){
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-    return ResponseEntity.ok(transactionService.returnHowMuchYouveSpent(user));
+    return ResponseEntity.ok(transactionService.getTotalExpenses(id));
   }
 
   @GetMapping("/income/{id}")
   public ResponseEntity<Double> returnHowMuchYouveEarned(@PathVariable long id){
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-    return ResponseEntity.ok(transactionService.returnHowMuchYouveEarned(user));
+    return ResponseEntity.ok(transactionService.getTotalIncome(id));
   }
 
   @GetMapping("/category")
   public ResponseEntity<List<TransactionResponseDTO>> returnSpecificCategoryofTransactionList (@PathVariable long id, @RequestParam Category category){
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-    List<Transaction> listOfTransactions = transactionService.returnSpecificCategoryofTransactionList(user, category);
+    List<Transaction> listOfTransactions = transactionService.returnSpecificCategoryofTransactionList(id, category);
 
     List<TransactionResponseDTO> listofResponseDTOs = TransactionMapper.transactionListToResponseList(listOfTransactions);
 
@@ -116,9 +112,8 @@ public class TransactionController {
 
   @GetMapping("/time")
   public ResponseEntity<List<TransactionResponseDTO>> returnTransactionsInSpecificPeriodOfTime(@PathVariable long id, @RequestParam OffsetDateTime time){
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-    List<Transaction> listOfTransactions = transactionService.returnTransactionsInSpecificPeriodOfTime(user,time);
+    List<Transaction> listOfTransactions = transactionService.returnTransactionsInSpecificPeriodOfTime(id,time);
 
     List<TransactionResponseDTO> listOfResponseDTOs = TransactionMapper.transactionListToResponseList(listOfTransactions);
 
@@ -129,9 +124,8 @@ public class TransactionController {
 
   @DeleteMapping("/delete{id}/{idTransaction}")
   public ResponseEntity<Void> deleteTransactionFromAccount(@PathVariable long id, @PathVariable long idTransaction) {
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-    Transaction tx = transactionService.returnSpecificTransaction(user, idTransaction);
+    Transaction tx = transactionService.getTransactionById(id, idTransaction);
 
     transactionService.deleteTransaction(tx.getId());
 
