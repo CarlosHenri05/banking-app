@@ -68,20 +68,17 @@ public class TransactionController {
   }
 
 
-  /*
-   * TO-DO:
-   * 
-   * Adicionar parâmetro de usuário para buscar dentro da lista de transações
-   * um id de transação específica de um usuário específico, para diminuir a
-   * generalização
-   */
   @GetMapping("/{id}")
   @Operation(summary = "Retornar uma transação de id específico")
-  public ResponseEntity<TransactionResponseDTO> returnSpecificTransation(@RequestParam long id) {
-    Transaction transaction = transactionRepository.getById(id);
+  public ResponseEntity<TransactionResponseDTO> returnSpecificTransation(@RequestParam long id, long idTransaction) {
+    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-    TransactionResponseDTO transactionResponse = TransactionMapper.toResponse(transaction);
+    Transaction transaction = transactionService.returnSpecificTransaction(user, idTransaction);
 
-    return ResponseEntity.ok(transactionResponse);
+    TransactionResponseDTO response = TransactionMapper.toResponse(transaction);
+
+    return ResponseEntity.ok(response);
+
+    
   }
 }
