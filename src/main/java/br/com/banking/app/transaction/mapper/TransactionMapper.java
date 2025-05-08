@@ -15,12 +15,7 @@ public class TransactionMapper {
   }
 
   public static TransactionResponseDTO toResponse(Transaction transaction) {
-    return new TransactionResponseDTO(
-        transaction.getId(),
-        transaction.getAmount(),
-        transaction.getUser().getUsername(),
-        transaction.getTime()
-    );
+    return new TransactionResponseDTO(transaction.getId(), transaction.getAmount(), transaction.getUser().getUsername(), transaction.getTime(), transaction.getCategory());
   }
   
   public static List<TransactionResponseDTO> transactionListToResponseList (List<Transaction> transactionList) {
