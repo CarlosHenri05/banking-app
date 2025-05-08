@@ -66,6 +66,7 @@ public class SecurityConfig {
       .requestMatchers("/transactions").permitAll()
       .requestMatchers("/transactions/all").permitAll()
       .requestMatchers("/transactions/{id}").permitAll()
+      .requestMatchers("/transactions/transaction{id}").permitAll()
       .anyRequest()
       .authenticated())
       .authenticationProvider(authenticationProvider())
