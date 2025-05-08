@@ -68,7 +68,7 @@ public class TransactionController {
   }
 
 
-  @GetMapping("/{id}")
+  @GetMapping("/transaction{id}")
   @Operation(summary = "Retornar uma transação de id específico")
   public ResponseEntity<TransactionResponseDTO> returnSpecificTransation(@RequestParam long id, long idTransaction) {
     User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
@@ -78,7 +78,13 @@ public class TransactionController {
     TransactionResponseDTO response = TransactionMapper.toResponse(transaction);
 
     return ResponseEntity.ok(response);
+  }
 
-    
+  @GetMapping("/balance{id}")
+  @Operation(summary = "Retornar o saldo da conta de um usuário específico")
+  public ResponseEntity<Double> returnAccountBalance(@RequestParam long id){
+    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+    return ResponseEntity.ok(transactionService.returnAccountBalance(user));
   }
 }
