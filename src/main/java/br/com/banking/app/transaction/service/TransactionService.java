@@ -44,7 +44,7 @@ public class TransactionService {
     return null;
   }
 
-  public static Double returnAccountBalance(User user){
+  public Double returnAccountBalance(User user){
     return user.getTransactions().stream()
                                  .mapToDouble(Transaction::getAmount)
                                  .sum();
