@@ -1,7 +1,7 @@
 package br.com.banking.app.transaction.dto;
 
 import java.time.OffsetDateTime;
-
+import java.util.Locale.Category;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,4 +23,7 @@ public class TransactionRequestDTO {
 
   @NotNull
   private OffsetDateTime time;
+
+  @NotNull
+  private Category category;
 }
