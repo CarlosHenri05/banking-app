@@ -32,6 +32,8 @@ public class Transaction {
 
   private OffsetDateTime time;
 
+  private Category category;
+
   public Transaction() {
     
   }
