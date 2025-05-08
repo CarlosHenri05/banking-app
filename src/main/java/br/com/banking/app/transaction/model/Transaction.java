@@ -38,11 +38,18 @@ public class Transaction {
     
   }
 
-
   public Transaction(User user, double amount, OffsetDateTime time){
+    this.user = user;
+    this.amount = amount;
+    this.time = time;
+  }
+
+
+  public Transaction(User user, double amount, OffsetDateTime time, Category category){
     this.amount = amount;
     this.user = user;
     this.time = time;
+    this.category = category;
   }
 
 }

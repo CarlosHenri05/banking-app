@@ -85,6 +85,6 @@ public class TransactionController {
   public ResponseEntity<Double> returnAccountBalance(@RequestParam long id){
     User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-    return ResponseEntity.ok(transactionService.returnAccountBalance(user));
+    return ResponseEntity.ok(transactionService.returnHowMuchYouveSpent(user));
   }
 }

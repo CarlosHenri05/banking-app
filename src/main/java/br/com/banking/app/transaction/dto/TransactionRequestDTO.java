@@ -1,29 +1,40 @@
 package br.com.banking.app.transaction.dto;
 
 import java.time.OffsetDateTime;
-import java.util.Locale.Category;
 
+import br.com.banking.app.transaction.model.Category;
+import br.com.banking.app.transaction.model.TransactionStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class TransactionRequestDTO {
 
-  private long id;
+    private long id;
 
-  @Positive
-  private double amount;
+    @Positive
+    private double amount;
 
-  @NotNull
-  private OffsetDateTime time;
+    @NotNull
+    private OffsetDateTime time;
 
-  @NotNull
-  private Category category;
+    @NotNull
+    private Category category;
+
+    private String description;
+
+    private TransactionStatus status;
+
+    private OffsetDateTime dueDate;
+
+    private boolean isPlanned;
 }
