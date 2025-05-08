@@ -1,9 +1,11 @@
 package br.com.banking.app.transaction.service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import br.com.banking.app.transaction.model.Category;
 import br.com.banking.app.transaction.model.Transaction;
 import br.com.banking.app.transaction.repository.TransactionRepository;
 import br.com.banking.app.user.model.User;
@@ -50,7 +52,17 @@ public class TransactionService {
                                  .sum();
   }
 
-  
+  public List<Transaction> returnSpecificTypeOfTransactionList(User user, Category category){
+    return user.getTransactions().stream()
+                                 .filter(transaction -> transaction.getCategory().equals(category))
+                                 .toList();
+  }
+
+  public List<Transaction> returnTransactionsInSpecificPeriodOfTime(User user, OffsetDateTime time){
+    return user.getTransactions().stream()
+                                 .filter(transaction -> transaction.getTime().equals(time))
+                                 .toList();
+    }  
 
 
 
