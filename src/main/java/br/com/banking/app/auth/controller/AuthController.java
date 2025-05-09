@@ -28,7 +28,7 @@ public class AuthController {
 
   @Operation(summary = "Login", description = "User login")
   @ApiResponse(responseCode = "200", description = "User logged in successfully")
-  @PostMapping("/auth/login")
+  @PostMapping("/login")
   public ResponseEntity<AuthResponseDTO> userLogin (@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
     return ResponseEntity.ok(authService.signIn(loginRequestDTO));
   }
@@ -36,7 +36,7 @@ public class AuthController {
   @Operation(summary = "Register", description = "User register")
   @ApiResponse(responseCode = "200", description = "User registered successfully")
   @ApiResponse(responseCode = "400", description = "User already exists")
-  @PostMapping("/auth/register") 
+  @PostMapping("/register") 
   public ResponseEntity<AuthResponseDTO> userRegister (@RequestBody @Valid RegisterRequestDTO RegisterRequestDTO) {
     return ResponseEntity.ok(authService.signUp(RegisterRequestDTO));
   }
