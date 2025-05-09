@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 
 import br.com.banking.app.transaction.model.Category;
 import br.com.banking.app.transaction.model.TransactionStatus;
+import br.com.banking.app.transaction.model.TransactionType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,6 @@ public class TransactionRequestDTO {
 
     private TransactionStatus status;
 
-    private OffsetDateTime dueDate;
+    private TransactionType type;
 
-    private boolean isPlanned;
 }
