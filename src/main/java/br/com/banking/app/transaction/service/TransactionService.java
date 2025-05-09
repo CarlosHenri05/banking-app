@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.banking.app.transaction.model.Category;
 import br.com.banking.app.transaction.model.Transaction;
+import br.com.banking.app.transaction.model.TransactionType;
 import br.com.banking.app.transaction.repository.TransactionRepository;
 import br.com.banking.app.user.model.User;
 import br.com.banking.app.user.repository.UserRepository;
@@ -48,11 +49,19 @@ public class TransactionService {
 
   public Double returnHowMuchYouveSpent(User user){
     return user.getTransactions().stream()
+                                 .filter(transaction -> transaction.getType() == TransactionType.EXPENSE)
                                  .mapToDouble(Transaction::getAmount)
                                  .sum();
   }
 
-  public List<Transaction> returnSpecificTypeOfTransactionList(User user, Category category){
+  public Double returnHowMuchYouveEarned(User user){
+    return user.getTransactions().stream()
+                                 .filter(transaction -> transaction.getType() == TransactionType.INCOME)
+                                 .mapToDouble(Transaction::getAmount)
+                                 .sum();
+  }
+
+  public List<Transaction> returnSpecificCategoryofTransactionList(User user, Category category){
     return user.getTransactions().stream()
                                  .filter(transaction -> transaction.getCategory().equals(category))
                                  .toList();
@@ -60,9 +69,15 @@ public class TransactionService {
 
   public List<Transaction> returnTransactionsInSpecificPeriodOfTime(User user, OffsetDateTime time){
     return user.getTransactions().stream()
-                                 .filter(transaction -> transaction.getTime().equals(time))
+                                 .filter(transaction -> transaction.getCreatedAt().equals(time))
                                  .toList();
     }  
+
+  public void deleteTransaction(long id) {
+    Transaction transaction = transactionRepository.findById(id).orElseThrow( ()-> new RuntimeException("Transaction not found"));
+
+    transactionRepository.delete(transaction);
+  }
 
 
 
