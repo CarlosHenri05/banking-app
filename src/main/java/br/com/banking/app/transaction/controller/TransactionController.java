@@ -24,8 +24,10 @@ import br.com.banking.app.transaction.service.TransactionService;
 import br.com.banking.app.user.model.User;
 import br.com.banking.app.user.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -45,7 +47,7 @@ public class TransactionController {
             @ApiResponse(responseCode = "422", description = "Transação não concluída, possivelmente erro com valores inválidos.")
     })
   @PostMapping("/save")
-  public ResponseEntity<Void> postTransaction(TransactionRequestDTO transactionRequestDTO) {
+  public ResponseEntity<Void> postTransaction(@RequestBody @Valid TransactionRequestDTO transactionRequestDTO) {
     User user = userRepository.findById(transactionRequestDTO.getId()).orElseThrow( () -> new RuntimeException("User not found"));
 
     Transaction tx = TransactionMapper.toEntity(transactionRequestDTO, user);
@@ -61,7 +63,7 @@ public class TransactionController {
     @ApiResponse(responseCode = "403", description = "Sem permissão para essa ação"),
     @ApiResponse(responseCode = "400", description = "ID não encontrado")
   })
-  @GetMapping("/all")
+  @GetMapping("/all/{id}")
   public ResponseEntity<List<TransactionResponseDTO>> getAllTransactions(@PathVariable long id) {
     User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -85,7 +87,7 @@ public class TransactionController {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/expense{id}")
+  @GetMapping("/expense/{id}")
   @Operation(summary = "Retornar o quanto de dinheiro foi gasto de um usuário específico")
   public ResponseEntity<Double> returnHowMuchYouveSpent(@PathVariable long id){
     User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
@@ -93,7 +95,7 @@ public class TransactionController {
     return ResponseEntity.ok(transactionService.returnHowMuchYouveSpent(user));
   }
 
-  @GetMapping("/income{id}")
+  @GetMapping("/income/{id}")
   public ResponseEntity<Double> returnHowMuchYouveEarned(@PathVariable long id){
     User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
