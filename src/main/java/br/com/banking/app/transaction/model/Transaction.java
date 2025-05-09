@@ -30,26 +30,38 @@ public class Transaction {
 
   private double amount;
 
-  private OffsetDateTime time;
+  private OffsetDateTime createdAt;
 
   private Category category;
+
+  private String description;
+
+  private TransactionStatus status; 
+
+  private TransactionType type;
 
   public Transaction() {
     
   }
 
-  public Transaction(User user, double amount, OffsetDateTime time){
+  public Transaction(User user, double amount, OffsetDateTime time, String description, TransactionStatus status, TransactionType type){
     this.user = user;
     this.amount = amount;
-    this.time = time;
+    this.createdAt = time;
+    this.description = description;
+    this.status = status;
+    this.type = type;
   }
 
 
-  public Transaction(User user, double amount, OffsetDateTime time, Category category){
+  public Transaction(User user, double amount, OffsetDateTime time, Category category, String description,TransactionStatus status, TransactionType type ){
     this.amount = amount;
     this.user = user;
-    this.time = time;
+    this.createdAt = time;
     this.category = category;
+    this.description = description;
+    this.status = status;
+    this.type = type;
   }
 
 }

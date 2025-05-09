@@ -2,27 +2,28 @@ package br.com.banking.app.transaction.model;
 
 public enum Category {
     // Receitas
-    SALARIO,           // Salário
-    BONUS,            // Bônus
-    INVESTIMENTOS,    // Rendimentos de investimentos
-    OUTRAS_RECEITAS,  // Outras receitas
+    SALARIO,           
+    BONUS,            
+    INVESTIMENTOS,   
+    OUTRAS_RECEITAS,  
 
     // Despesas Fixas
-    MORADIA,          // Aluguel, condomínio, IPTU
-    ALIMENTACAO,      // Supermercado, restaurantes
-    TRANSPORTE,       // Combustível, transporte público
-    SAUDE,            // Plano de saúde, medicamentos
-    EDUCACAO,         // Mensalidades, cursos
-    SERVICOS,         // Água, luz, internet, telefone
+    MORADIA,          
+    ALIMENTACAO,     
+    TRANSPORTE,     
+    SAUDE,            
+    EDUCACAO,         
+    SERVICOS,        
 
     // Despesas Variáveis
-    LAZER,            // Entretenimento, hobbies
-    VESTUARIO,        // Roupas, calçados
-    VIAGENS,          // Viagens e passeios
-    PRESENTES,        // Presentes e doações
-    BELEZA,           // Cuidados pessoais
-    TECNOLOGIA,       // Gadgets, eletrônicos
+    LAZER,            
+    VESTUARIO,        
+    VIAGENS,          
+    PRESENTES,        
+    BELEZA,           
+    TECNOLOGIA,
+    CREDITO,       
 
-    // Outros
-    OUTRAS_DESPESAS   // Outras despesas não categorizadas
+    
+    OUTRAS_DESPESAS   
 }
