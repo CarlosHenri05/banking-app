@@ -52,12 +52,14 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
     http
       .csrf(csrf -> csrf.disable())
+      .headers(headers -> headers.frameOptions().sameOrigin())
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authorizeHttpRequests(authorize -> 
       authorize.requestMatchers("/auth/**").permitAll()
       .requestMatchers("/v3/api-docs/**").permitAll()
       .requestMatchers("/transactions/save").permitAll()
       .requestMatchers("/transactions/**").permitAll()
+      .requestMatchers("/save").permitAll()
       .requestMatchers("/swagger-ui/**").permitAll()
       .requestMatchers("/swagger-ui/index.html").permitAll()
       .requestMatchers("/swagger-ui.html").permitAll()
@@ -70,6 +72,7 @@ public class SecurityConfig {
       .requestMatchers("/transactions/type").permitAll()
       .requestMatchers("/transactions/expense{id}").permitAll()
       .requestMatchers("/transactions/income{id}").permitAll()
+      .requestMatchers("/h2-console/**").permitAll()
       .requestMatchers("/transactions/delete{id}/{idTransaction}").permitAll()
       .anyRequest()
       .authenticated())

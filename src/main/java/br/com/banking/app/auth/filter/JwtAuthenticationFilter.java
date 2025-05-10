@@ -1,6 +1,8 @@
 package br.com.banking.app.auth.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,6 +30,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
   private final JwtService jwtService;
   private final UserService userService;
+
+
+  private final List<String> allowedPaths = Arrays.asList(
+    "/auth/", 
+        "/v3/api-docs/", 
+        "/swagger-ui/",
+        "/transactions/save",
+        "/transactions/all",
+        "/transactions/type",
+        "/all"
+  );
+
+  @Override
+   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        // Ignorar filtro para caminhos permitidos
+        return allowedPaths.stream()
+                .anyMatch(path::startsWith);
+    }
+
 
   @Override
   protected void doFilterInternal (@NonNull HttpServletRequest httpRequest, @NonNull HttpServletResponse httpResponse, @NonNull FilterChain filterChain) throws ServletException, IOException {

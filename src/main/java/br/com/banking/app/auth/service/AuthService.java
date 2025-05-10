@@ -27,7 +27,7 @@ public class AuthService {
 
  public AuthResponseDTO signUp (RegisterRequestDTO registerRequestDTO) {
       var user = User.builder()
-                    .email(registerRequestDTO.getEmail())
+                    .username(registerRequestDTO.getEmail())
                     .password(passwordEncoder.encode(registerRequestDTO.getPassword()))    
                     .role(Roles.USER)
                     .build();
@@ -47,7 +47,7 @@ public class AuthService {
         loginRequestDTO.getEmail(),
         loginRequestDTO.getPassword()
     ));
-    var user = userRepository.findByEmail(loginRequestDTO.getEmail())
+    var user = userRepository.findByUsername(loginRequestDTO.getEmail())
                              .orElseThrow(() -> new IllegalArgumentException("User not found"));
     
 

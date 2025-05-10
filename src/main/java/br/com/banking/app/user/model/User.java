@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.banking.app.transaction.model.Transaction;
+import br.com.banking.app.transactions.model.Transaction;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +43,7 @@ public class User implements UserDetails{
   private Long id;
 
   @Column(unique = true)
-  private String email;
+  private String username;
 
   private String password;
   private LocalDateTime createdAt;
@@ -65,7 +65,7 @@ public class User implements UserDetails{
 
   @Override
   public String getUsername() {
-    return email;
+    return username;
   }
 
   @Override
