@@ -9,6 +9,7 @@ import br.com.banking.app.transactions.dto.TransactionRequestDTO;
 import br.com.banking.app.transactions.dto.TransactionResponseDTO;
 import br.com.banking.app.transactions.mapper.TransactionMapper;
 import br.com.banking.app.transactions.model.Transaction;
+import br.com.banking.app.transactions.model.TransactionCategory;
 import br.com.banking.app.transactions.service.TransactionService;
 import br.com.banking.app.user.model.User;
 import br.com.banking.app.user.repository.UserRepository;
@@ -28,7 +29,7 @@ public class TransactionController {
   public ResponseEntity<Void> postTransaction(@PathVariable long userId, @RequestBody @Valid TransactionRequestDTO requestDTO) {
 
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com id: " + userId));
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
     Transaction transaction = TransactionMapper.toEntity(requestDTO);
 
@@ -53,4 +54,28 @@ public class TransactionController {
 
     return ResponseEntity.ok(listOfResponses);
   }
+
+  @GetMapping("/all/{userId}/{category}")
+  public ResponseEntity<List<TransactionResponseDTO>> getAllTransactionsFromSameCategory (@PathVariable long userId, @RequestParam TransactionCategory category){
+    List<Transaction> listOfTransactions = transactionService.getAllTransactionsFromSameCategory(userId, category);
+    
+    List<TransactionResponseDTO> listOfResponses = TransactionMapper.transactionListToResponseList(listOfTransactions);
+
+    return ResponseEntity.ok(listOfResponses);
+  }
+
+  @GetMapping("/{userId}/income")
+  public ResponseEntity<Double> getTotalIncome(@PathVariable long userId){
+    Double sumOfIncomes = transactionService.getTotalIncome(userId);
+
+    return ResponseEntity.ok(sumOfIncomes);
+  }
+
+  @GetMapping("/{userId}/expenses")
+  public ResponseEntity<Double> getTotalExpenses(@PathVariable long userId){
+    Double sumOfExpenses = transactionService.getTotalExpenses(userId);
+
+    return ResponseEntity.ok(sumOfExpenses);
+  }
+
 }
