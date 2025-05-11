@@ -54,13 +54,24 @@ public class TransactionService {
                                   .toList();
   }
   
-  public List<Transaction> getTotalIncome(long userId){
+  public Double getTotalIncome(long userId){
     User user = userRepository.findById(userId)
                               .orElseThrow(() -> new IllegalArgumentException("User not found"));
     
     return user.getTransactions().stream()
                                  .filter(transaction -> transaction.getType() == TransactionType.INCOME)
-                                 .toList();
+                                 .mapToDouble(transaction -> transaction.getAmount())
+                                 .sum();
+  }
+
+  public Double getTotalExpenses(long userId){
+    User user = userRepository.findById(userId)
+                              .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    
+    return user.getTransactions().stream()
+                                 .filter(transaction -> transaction.getType() == TransactionType.EXPENSE)
+                                 .mapToDouble(transaction -> transaction.getAmount())
+                                 .sum();
   }
 
 }
