@@ -74,4 +74,8 @@ public class TransactionService {
                                  .sum();
   }
 
+  public Double getTotalBalance(long userId){
+    return getTotalIncome(userId) - getTotalExpenses(userId);
+  }
+
 }
