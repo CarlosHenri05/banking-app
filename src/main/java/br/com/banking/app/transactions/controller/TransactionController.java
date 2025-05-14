@@ -78,4 +78,11 @@ public class TransactionController {
     return ResponseEntity.ok(sumOfExpenses);
   }
 
+  @GetMapping("/{userId}/balance")
+  public ResponseEntity<Double> getAccountBalance(@PathVariable long userId){
+    Double accountBalance = transactionService.getTotalBalance(userId);
+
+    return ResponseEntity.ok(accountBalance);
+  }
+
 }
