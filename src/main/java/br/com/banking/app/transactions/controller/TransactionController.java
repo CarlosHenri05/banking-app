@@ -82,7 +82,8 @@ public class TransactionController {
   public ResponseEntity<Double> getAccountBalance(@PathVariable long userId){
     Double accountBalance = transactionService.getTotalBalance(userId);
 
-    return ResponseEntity.ok(accountBalance);
+    return ResponseEntity.ok(accountBalance); 
+    
   }
 
 }
